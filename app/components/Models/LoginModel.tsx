@@ -1,9 +1,9 @@
 "use client"
 
-import axios from 'axios';
+import { signIn } from 'next-auth/react'
 import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import {
     FieldValues,
     SubmitHandler,
@@ -18,8 +18,10 @@ import Heading from '../Heading';
 import Input from '../Inputs/Input';
 import { toast } from 'react-hot-toast';
 import Button from '../Button';
+import { useRouter } from 'next/navigation';
 
-const RegisterModel = () => {
+const LoginModel = () => {
+    const router = useRouter();
     const registerModel = useRegisterModel();
     const loginModel = useLoginModel();
     const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +34,6 @@ const RegisterModel = () => {
         }
     } = useForm<FieldValues>({
         defaultValues: {
-            name: '',
             email: '',
             password: ''
         }
@@ -41,40 +42,39 @@ const RegisterModel = () => {
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true);
 
-        axios.post('/api/register', data)
-            .then(() => {
-                registerModel.onClose();
-            })
-            .catch((err) => {
-                toast.error("Something went wrong.");
-            })
-            .finally(() => {
-                setIsLoading(false);
-            })
+        signIn('credentials', {
+            ...data,
+            redirect: false,
+        })
+        .then((callback) => {
+            setIsLoading(false);
+
+            if(callback?.ok) {
+                toast.success("Logged In");
+                router.refresh();
+                loginModel.onClose();
+            }
+
+            if(callback?.error){
+                toast.error(callback.error);
+            }
+        })
     }
 
     const toggle = () => {
-        registerModel.onClose();
-        loginModel.onOpen();
+        registerModel.onOpen();
+        loginModel.onClose();
     }
 
     const bodyContent = (
         <div className='flex flex-col gap-4'>
             <Heading
-                title = "Welcome to Airbnb"
-                subtitle='Create an account'
+                title = "Welcome back"
+                subtitle='Login to your account'
             />
             <Input
                 id="email"
                 label='Email'
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                required
-            />
-            <Input
-                id="name"
-                label='Name'
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -119,7 +119,7 @@ const RegisterModel = () => {
                     className='justify-center flex flex-row items-center gap-2'
                 >
                     <div>
-                        Already have an account?
+                        Don't have an account?
                     </div>
                     <div
                         onClick={toggle}
@@ -129,7 +129,7 @@ const RegisterModel = () => {
                             hover:underline
                         '
                     >
-                        Log in
+                        Sign up
                     </div>
                 </div>
             </div>
@@ -139,10 +139,10 @@ const RegisterModel = () => {
     return (
         <Model 
             disabled = {isLoading}
-            isOpen = {registerModel.isOpen}
-            title = "Register"
+            isOpen = {loginModel.isOpen}
+            title = "Login"
             actionlabel="Continue"
-            onClose={registerModel.onClose}
+            onClose={loginModel.onClose}
             onSubmit={handleSubmit(onSubmit)}
             body={bodyContent}
             footer={footerContent}
@@ -150,4 +150,4 @@ const RegisterModel = () => {
     );
 }
 
-export default RegisterModel;
+export default LoginModel;
