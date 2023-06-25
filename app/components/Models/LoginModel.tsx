@@ -1,9 +1,8 @@
 "use client"
 
 import { signIn } from 'next-auth/react'
-import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
     FieldValues,
     SubmitHandler,
@@ -55,16 +54,16 @@ const LoginModel = () => {
                 loginModel.onClose();
             }
 
-            if(callback?.error){
+            else if(callback?.error){
                 toast.error(callback.error);
             }
         })
     }
 
-    const toggle = () => {
+    const toggle = useCallback(() => {
         registerModel.onOpen();
         loginModel.onClose();
-    }
+    }, [registerModel, loginModel])
 
     const bodyContent = (
         <div className='flex flex-col gap-4'>
@@ -99,13 +98,7 @@ const LoginModel = () => {
                 outline
                 label='Continue with Google'
                 icon = {FcGoogle}
-                onClick={() => {}}
-            />
-            <Button 
-                outline
-                label='Continue with Github'
-                icon = {AiFillGithub}
-                onClick={() => {}}
+                onClick={() => signIn('google')}
             />
             <div
                 className='
@@ -119,7 +112,7 @@ const LoginModel = () => {
                     className='justify-center flex flex-row items-center gap-2'
                 >
                     <div>
-                        Don't have an account?
+                        {`Don't have an account?`}
                     </div>
                     <div
                         onClick={toggle}
