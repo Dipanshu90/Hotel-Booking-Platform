@@ -9,6 +9,7 @@ import RegisterModel from './components/Models/RegisterModel';
 import ToasterProvider from './providers/ToasterProvider';
 import LoginModel from './components/Models/LoginModel';
 import getCurrentUser from './actions/getCurrentUser';
+import RentModel from './components/Models/RentModel';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,6 +35,7 @@ export default async function RootLayout({
         <ClientOnly>
           <ToasterProvider></ToasterProvider>
           <LoginModel />
+          <RentModel />
           <RegisterModel /> {/*isOpen - same as isOpen = true */} 
           <Navbar currentUser={currentUser}/>
         </ClientOnly>
