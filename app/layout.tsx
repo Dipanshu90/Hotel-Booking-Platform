@@ -39,7 +39,9 @@ export default async function RootLayout({
           <RegisterModel /> {/*isOpen - same as isOpen = true */} 
           <Navbar currentUser={currentUser}/>
         </ClientOnly>
-        {children}
+        <div className='pb-20 pt-28'>
+          {children}
+        </div>
       </body>
     </html>
   )
