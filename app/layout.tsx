@@ -4,7 +4,6 @@ import Navbar from './components/navbar/Navbar';
 import './globals.css'
 import { Inter } from 'next/font/google'
 import ClientOnly from './components/ClientOnly';
-import Model from './components/Models/Model';
 import RegisterModel from './components/Models/RegisterModel';
 import ToasterProvider from './providers/ToasterProvider';
 import LoginModel from './components/Models/LoginModel';

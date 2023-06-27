@@ -9,16 +9,18 @@ import useRegisterModel from '@/app/hooks/useRegisterModel';
 import useLoginModel from '@/app/hooks/useLoginModel';
 import useRentModel from '@/app/hooks/useRentModel';
 
-import { User } from '@prisma/client';
 import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { SafeUser } from '@/app/types';
 
 interface UserMenuProps {
-    currentUser?: User | null;
+    currentUser?: SafeUser | null;
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({
     currentUser
 }) => {
+    const router = useRouter();
     const registerModel = useRegisterModel();
     const loginModel = useLoginModel();
     const rentModel = useRentModel();
@@ -101,7 +103,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                         {currentUser ? (
                             <>
                                 <MenuItem 
-                                    onClick={() => {}}
+                                    onClick={() => router.push('/trips')}
                                     label='My trips'
                                 />
                                 <MenuItem 
@@ -109,7 +111,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                                     label='My favourites'
                                 />
                                 <MenuItem 
-                                    onClick={() => {}}
+                                    onClick={() => router.push('/reservations')}
                                     label='My reservations'
                                 />
                                 <MenuItem 
