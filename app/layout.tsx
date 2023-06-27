@@ -9,6 +9,7 @@ import ToasterProvider from './providers/ToasterProvider';
 import LoginModel from './components/Models/LoginModel';
 import getCurrentUser from './actions/getCurrentUser';
 import RentModel from './components/Models/RentModel';
+import SearchModel from './components/Models/SearchModel';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,6 +34,7 @@ export default async function RootLayout({
       <body className={font.className}>
         <ClientOnly>
           <ToasterProvider></ToasterProvider>
+          <SearchModel />
           <LoginModel />
           <RentModel />
           <RegisterModel /> {/*isOpen - same as isOpen = true */} 
