@@ -12,11 +12,13 @@ import { formatISO } from 'date-fns';
 import Heading from '../Heading';
 import Calendar from '../Inputs/Calendar';
 import Counter from '../Inputs/Counter';
+import RangeSlider from '../Inputs/RangeSlider'
 
 enum STEPS {
     LOCATION = 0,
     DATE = 1,
-    INFO = 2
+    PRICE = 2,
+    INFO = 3
 }
 
 const SearchModel = () => {
@@ -34,6 +36,7 @@ const SearchModel = () => {
         endDate: new Date(),
         key: 'selection'
     })
+    const [price, setPrice] = useState(1);
 
     const Map = useMemo(() => dynamic(() => import('../Map'), {
         ssr: false
@@ -63,7 +66,8 @@ const SearchModel = () => {
             locationValue: location?.value,
             guestCount,
             roomCount,
-            bathroomCount
+            bathroomCount,
+            price
         };
 
         if(dateRange.startDate) {
@@ -93,7 +97,8 @@ const SearchModel = () => {
         step,
         location,
         guestCount,
-        params
+        params,
+        price
     ]);
 
     const actionLabel = useMemo(() => {
@@ -141,6 +146,23 @@ const SearchModel = () => {
                 <Calendar 
                     value={dateRange}
                     onChange={(value) => setDateRange(value.selection)}
+                />
+            </div>
+        )
+    }
+
+    if(step === STEPS.PRICE) { 
+        bodyContent = (
+            <div className='flex flex-col gap-8'>
+                <Heading 
+                    title='Price'
+                    subtitle='Select your max price!'
+                />
+                <RangeSlider
+                    min={100}
+                    max={1000}
+                    price={price}
+                    onChange={(value) => setPrice(value)}
                 />
             </div>
         )
